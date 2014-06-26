@@ -82,18 +82,14 @@ public class TocHW4
 	    		{
 		    		for(int j = 0; j < roadnamelist.size(); j++)
 		    		{
-		    			//System.out.print(roadnamelist.get(j)+" ");
-	    				//System.out.println(avenuematcher.group());
 		    			if(roadnamelist.get(j).equals(avenuematcher.group()))
 		    			{
 		    				
 		    				appear = true;
 		    				index = j;
-		    				//System.out.print("Index: "+index);
 		    				break;
 		    			}
 		    		}
-		    		//System.out.println();
 		    		if(!appear)
 		    		{
 		    			List<Integer> tradeyearlist2 = new ArrayList<Integer>();
@@ -104,17 +100,13 @@ public class TocHW4
 			    		maxprice.add(tradeprice);
 			    		minprice.add(0);
 			    		continue;
-			    		/*for(int a = 0; a < tradeyearlist2.size(); a++)
-			    			System.out.print(tradeyearlist2.get(a)+" ");
-			    		System.out.println();*/
 		    		}
 		    		else
 		    		{
 		    			for(int k = 0; k < yearlist.get(index).size(); k++)
 		    			{
-		    				if(yearlist.get(index).get(k) == tradeyear)
+		    				if(yearlist.get(index).get(k).equals(tradeyear))
 		    				{
-		    					System.out.println(yearlist.get(index).get(k));
 		    					yearcheck = true;
 		    					break;
 		    				}
@@ -128,7 +120,7 @@ public class TocHW4
 	    					tempcounter = tempcounter + 1;
 	    	    			counter.set(index, tempcounter);
 	    	    			tradeyearlist3.add(tradeyear);
-	    		    		yearlist.set(0, tradeyearlist3);
+	    		    		yearlist.set(index, tradeyearlist3);
 		    			}
 		    		}
 	    		}
@@ -195,7 +187,7 @@ public class TocHW4
 		    		{
 		    			for(int k = 0; k < yearlist.get(index).size(); k++)
 		    			{
-		    				if(yearlist.get(index).get(k) == tradeyear)
+		    				if(yearlist.get(index).get(k).equals(tradeyear))
 		    				{
 		    					System.out.println(yearlist.get(index).get(k));
 		    					yearcheck = true;
@@ -211,7 +203,7 @@ public class TocHW4
 	    					tempcounter = tempcounter + 1;
 	    	    			counter.set(index, tempcounter);
 	    	    			tradeyearlist3.add(tradeyear);
-	    		    		yearlist.set(0, tradeyearlist3);
+	    		    		yearlist.set(index, tradeyearlist3);
 		    			}
 		    		}
 		    	}
@@ -279,7 +271,7 @@ public class TocHW4
 		    		{
 		    			for(int k = 0; k < yearlist.get(index).size(); k++)
 		    			{
-		    				if(yearlist.get(index).get(k) == tradeyear)
+		    				if(yearlist.get(index).get(k).equals(tradeyear))
 		    				{
 		    					System.out.println(yearlist.get(index).get(k));
 		    					yearcheck = true;
@@ -295,7 +287,7 @@ public class TocHW4
 	    					tempcounter = tempcounter + 1;
 	    	    			counter.set(index, tempcounter);
 	    	    			tradeyearlist3.add(tradeyear);
-	    		    		yearlist.set(0, tradeyearlist3);
+	    		    		yearlist.set(index, tradeyearlist3);
 		    			}
 		    		}
 	    		}
@@ -363,7 +355,7 @@ public class TocHW4
 		    		{
 		    			for(int k = 0; k < yearlist.get(index).size(); k++)
 		    			{
-		    				if(yearlist.get(index).get(k) == tradeyear)
+		    				if(yearlist.get(index).get(k).equals(tradeyear))
 		    				{
 		    					System.out.println(yearlist.get(index).get(k));
 		    					yearcheck = true;
@@ -379,7 +371,7 @@ public class TocHW4
 	    					tempcounter = tempcounter + 1;
 	    	    			counter.set(index, tempcounter);
 	    	    			tradeyearlist3.add(tradeyear);
-	    		    		yearlist.set(0, tradeyearlist3);
+	    		    		yearlist.set(index, tradeyearlist3);
 		    			}
 		    		}
 	    		}
