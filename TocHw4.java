@@ -1,13 +1,12 @@
 import java.io.*;
+import java.util.*;
 import java.net.*;
-
 import org.json.*;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.nio.charset.Charset;
 
-public class TocHW3
+public class TocHW4
 {
 	public static class RealPriceSearch
 	{
@@ -36,39 +35,401 @@ public class TocHW3
 			  }
 		  }
 	}
+		
 	public static void main(String[] args) throws JSONException, IOException
 	{
-		int value = 0, counter = 0;
+		int maxcounter = 0, index = 0, tempprice = 0;
+		boolean appear = false, yearcheck = false;
 		JSONArray json = RealPriceSearch.readJsonFromUrl(args[0]);
-	    Pattern county = Pattern.compile(args[1]);
-	    Pattern roadname = Pattern.compile(".*"+args[2]+".*");
+	    Pattern avenue = Pattern.compile(".*大道");
+	    Pattern road = Pattern.compile(".*路");
+	    Pattern street = Pattern.compile(".*街");
+	    Pattern lane = Pattern.compile(".*巷");
+	    List<String> roadnamelist = new ArrayList<String>();
+	    List<Integer> counter = new ArrayList<Integer>();
+	    List<List<Integer>> yearlist = new ArrayList<List<Integer>>();
+	    List<Integer> maxprice = new ArrayList<Integer>();
+	    List<Integer> minprice = new ArrayList<Integer>();
+	    List<Integer> indexlist = new ArrayList<Integer>();   
 	    
 	    for(int i = 0; i < json.length(); i++)
 	    {
 	    	JSONObject temp = json.getJSONObject(i);
 	    	String jsondata = temp.toString();
 	    	JSONObject data = new JSONObject(jsondata);
-	    	String countystring = (String) data.get("鄉鎮市區");
-	    	Matcher countymatcher = county.matcher(countystring);
-	    	String roadstring = (String) data.get("土地區段位置或建物區門牌");
-	    	Matcher roadmatcher = roadname.matcher(roadstring);
-	    	int tradeyear = data.getInt("交易年月");
 	    	
-	    	if(countymatcher.find())
+	    	String roadstring = (String) data.get("土地區段位置或建物區門牌");
+	    	int tradeyear = data.getInt("交易年月");
+	    	int tradeprice = data.getInt("總價元");
+	    	Matcher avenuematcher = avenue.matcher(roadstring);
+	    	Matcher roadmatcher = road.matcher(roadstring);
+	    	Matcher streetmatcher = street.matcher(roadstring);
+	    	Matcher lanematcher = lane.matcher(roadstring);
+	    	if(avenuematcher.find())
 	    	{
-	    		if(roadmatcher.find())
+	    		if(roadnamelist.isEmpty())
 	    		{
-	    			int year = Integer.parseInt(args[3]);
-	    			year = year * 100;
-	    			if(tradeyear - year > 0)
-	    			{
-	    				int tradevalue = data.getInt("總價元");
-	    				value = value + tradevalue;
-	    				counter++;
-	    			}
+	    			List<Integer> tradeyearlist1 = new ArrayList<Integer>();
+		    		roadnamelist.add(avenuematcher.group());
+		    		counter.add(1);
+		    		tradeyearlist1.add(tradeyear);
+		    		yearlist.add(tradeyearlist1);
+		    		maxprice.add(tradeprice);
+		    		minprice.add(0);
+		    		continue;
 	    		}
+	    		else
+	    		{
+		    		for(int j = 0; j < roadnamelist.size(); j++)
+		    		{
+		    			//System.out.print(roadnamelist.get(j)+" ");
+	    				//System.out.println(avenuematcher.group());
+		    			if(roadnamelist.get(j).equals(avenuematcher.group()))
+		    			{
+		    				
+		    				appear = true;
+		    				index = j;
+		    				//System.out.print("Index: "+index);
+		    				break;
+		    			}
+		    		}
+		    		//System.out.println();
+		    		if(!appear)
+		    		{
+		    			List<Integer> tradeyearlist2 = new ArrayList<Integer>();
+			    		roadnamelist.add(avenuematcher.group());
+			    		counter.add(1);
+			    		tradeyearlist2.add(tradeyear);
+			    		yearlist.add(tradeyearlist2);
+			    		maxprice.add(tradeprice);
+			    		minprice.add(0);
+			    		continue;
+			    		/*for(int a = 0; a < tradeyearlist2.size(); a++)
+			    			System.out.print(tradeyearlist2.get(a)+" ");
+			    		System.out.println();*/
+		    		}
+		    		else
+		    		{
+		    			for(int k = 0; k < yearlist.get(index).size(); k++)
+		    			{
+		    				if(yearlist.get(index).get(k) == tradeyear)
+		    				{
+		    					System.out.println(yearlist.get(index).get(k));
+		    					yearcheck = true;
+		    					break;
+		    				}
+		    			}
+		    			if(!yearcheck)
+		    			{
+		    				List<Integer> tradeyearlist3 = new ArrayList<Integer>();
+		    				for(int l = 0; l < yearlist.get(index).size(); l++)
+		    					tradeyearlist3.add(yearlist.get(index).get(l));
+	    					int tempcounter = counter.get(index);
+	    					tempcounter = tempcounter + 1;
+	    	    			counter.set(index, tempcounter);
+	    	    			tradeyearlist3.add(tradeyear);
+	    		    		yearlist.set(0, tradeyearlist3);
+		    			}
+		    		}
+	    		}
+		    			int tempmax = (Integer) maxprice.get(index);
+		    			int tempmin = (Integer) minprice.get(index);
+		    			if(tradeprice > tempmax)
+		    			{
+		    				tempprice = tempmax;
+		    				maxprice.set(index, tradeprice);	    				
+		    				minprice.set(index, tempprice);
+		    			}
+
+		    			else if(tradeprice > tempmin)
+		    				minprice.set(index, tradeprice);
+		    			else ;
+		    			appear = false;
+		    			yearcheck = false;
+	    		continue;
+	    	}
+	    	if(roadmatcher.find())
+	    	{
+	    		if(roadnamelist.isEmpty())
+	    		{
+	    			List<Integer> tradeyearlist1 = new ArrayList<Integer>();
+		    		roadnamelist.add(roadmatcher.group());
+		    		counter.add(1);
+		    		tradeyearlist1.add(tradeyear);
+		    		yearlist.add(tradeyearlist1);
+		    		maxprice.add(tradeprice);
+		    		minprice.add(0);
+		    		continue;
+	    		}
+	    		else
+	    		{
+		    		for(int j = 0; j < roadnamelist.size(); j++)
+		    		{
+		    			//System.out.print(roadnamelist.get(j)+" ");
+	    				//System.out.println(avenuematcher.group());
+		    			if(roadnamelist.get(j).equals(roadmatcher.group()))
+		    			{
+		    				
+		    				appear = true;
+		    				index = j;
+		    				//System.out.print("Index: "+index);
+		    				break;
+		    			}
+		    		}
+		    		//System.out.println();
+		    		if(!appear)
+		    		{
+		    			List<Integer> tradeyearlist2 = new ArrayList<Integer>();
+			    		roadnamelist.add(roadmatcher.group());
+			    		counter.add(1);
+			    		tradeyearlist2.add(tradeyear);
+			    		yearlist.add(tradeyearlist2);
+			    		maxprice.add(tradeprice);
+			    		minprice.add(0);
+			    		continue;
+			    		/*for(int a = 0; a < tradeyearlist2.size(); a++)
+			    			System.out.print(tradeyearlist2.get(a)+" ");
+			    		System.out.println();*/
+		    		}
+		    		else
+		    		{
+		    			for(int k = 0; k < yearlist.get(index).size(); k++)
+		    			{
+		    				if(yearlist.get(index).get(k) == tradeyear)
+		    				{
+		    					System.out.println(yearlist.get(index).get(k));
+		    					yearcheck = true;
+		    					break;
+		    				}
+		    			}
+		    			if(!yearcheck)
+		    			{
+		    				List<Integer> tradeyearlist3 = new ArrayList<Integer>();
+		    				for(int l = 0; l < yearlist.get(index).size(); l++)
+		    					tradeyearlist3.add(yearlist.get(index).get(l));
+	    					int tempcounter = counter.get(index);
+	    					tempcounter = tempcounter + 1;
+	    	    			counter.set(index, tempcounter);
+	    	    			tradeyearlist3.add(tradeyear);
+	    		    		yearlist.set(0, tradeyearlist3);
+		    			}
+		    		}
+		    	}
+		    			int tempmax = (Integer) maxprice.get(index);
+		    			int tempmin = (Integer) minprice.get(index);
+		    			if(tradeprice > tempmax)
+		    			{
+		    				tempprice = tempmax;
+		    				maxprice.set(index, tradeprice);	    				
+		    				minprice.set(index, tempprice);
+		    			}
+		    			else if(tradeprice > tempmin)
+		    				minprice.set(index, tradeprice);
+		    			else ;
+		    			appear = false;
+		    			yearcheck = false;
+		    		
+	    		
+	    		continue;
+	    	}
+	    	if(streetmatcher.find())
+	    	{
+	    		if(roadnamelist.isEmpty())
+	    		{
+	    			List<Integer> tradeyearlist1 = new ArrayList<Integer>();
+		    		roadnamelist.add(streetmatcher.group());
+		    		counter.add(1);
+		    		tradeyearlist1.add(tradeyear);
+		    		yearlist.add(tradeyearlist1);
+		    		maxprice.add(tradeprice);
+		    		minprice.add(0);
+		    		continue;
+	    		}
+	    		else
+	    		{
+		    		for(int j = 0; j < roadnamelist.size(); j++)
+		    		{
+		    			//System.out.print(roadnamelist.get(j)+" ");
+	    				//System.out.println(avenuematcher.group());
+		    			if(roadnamelist.get(j).equals(streetmatcher.group()))
+		    			{
+		    				
+		    				appear = true;
+		    				index = j;
+		    				//System.out.print("Index: "+index);
+		    				break;
+		    			}
+		    		}
+		    		//System.out.println();
+		    		if(!appear)
+		    		{
+		    			List<Integer> tradeyearlist2 = new ArrayList<Integer>();
+			    		roadnamelist.add(streetmatcher.group());
+			    		counter.add(1);
+			    		tradeyearlist2.add(tradeyear);
+			    		yearlist.add(tradeyearlist2);
+			    		maxprice.add(tradeprice);
+			    		minprice.add(0);
+			    		continue;
+			    		/*for(int a = 0; a < tradeyearlist2.size(); a++)
+			    			System.out.print(tradeyearlist2.get(a)+" ");
+			    		System.out.println();*/
+		    		}
+		    		else
+		    		{
+		    			for(int k = 0; k < yearlist.get(index).size(); k++)
+		    			{
+		    				if(yearlist.get(index).get(k) == tradeyear)
+		    				{
+		    					System.out.println(yearlist.get(index).get(k));
+		    					yearcheck = true;
+		    					break;
+		    				}
+		    			}
+		    			if(!yearcheck)
+		    			{
+		    				List<Integer> tradeyearlist3 = new ArrayList<Integer>();
+		    				for(int l = 0; l < yearlist.get(index).size(); l++)
+		    					tradeyearlist3.add(yearlist.get(index).get(l));
+	    					int tempcounter = counter.get(index);
+	    					tempcounter = tempcounter + 1;
+	    	    			counter.set(index, tempcounter);
+	    	    			tradeyearlist3.add(tradeyear);
+	    		    		yearlist.set(0, tradeyearlist3);
+		    			}
+		    		}
+	    		}
+		    			int tempmax = (Integer) maxprice.get(index);
+		    			int tempmin = (Integer) minprice.get(index);
+		    			if(tradeprice > tempmax)
+		    			{
+		    				tempprice = tempmax;
+		    				maxprice.set(index, tradeprice);	    				
+		    				minprice.set(index, tempprice);
+		    			}
+		    			else if(tradeprice > tempmin)
+		    				minprice.set(index, tradeprice);
+		    			else ;
+		    			appear = false;
+		    			yearcheck = false;
+		    		
+	    		
+	    		continue;
+	    	}
+	    	if(lanematcher.find())
+	    	{
+	    		if(roadnamelist.isEmpty())
+	    		{
+	    			List<Integer> tradeyearlist1 = new ArrayList<Integer>();
+		    		roadnamelist.add(lanematcher.group());
+		    		counter.add(1);
+		    		tradeyearlist1.add(tradeyear);
+		    		yearlist.add(tradeyearlist1);
+		    		maxprice.add(tradeprice);
+		    		minprice.add(0);
+		    		continue;
+	    		}
+	    		else
+	    		{
+		    		for(int j = 0; j < roadnamelist.size(); j++)
+		    		{
+		    			//System.out.print(roadnamelist.get(j)+" ");
+	    				//System.out.println(avenuematcher.group());
+		    			if(roadnamelist.get(j).equals(lanematcher.group()))
+		    			{
+		    				
+		    				appear = true;
+		    				index = j;
+		    				//System.out.print("Index: "+index);
+		    				break;
+		    			}
+		    		}
+		    		//System.out.println();
+		    		if(!appear)
+		    		{
+		    			List<Integer> tradeyearlist2 = new ArrayList<Integer>();
+			    		roadnamelist.add(lanematcher.group());
+			    		counter.add(1);
+			    		tradeyearlist2.add(tradeyear);
+			    		yearlist.add(tradeyearlist2);
+			    		maxprice.add(tradeprice);
+			    		minprice.add(0);
+			    		continue;
+			    		/*for(int a = 0; a < tradeyearlist2.size(); a++)
+			    			System.out.print(tradeyearlist2.get(a)+" ");
+			    		System.out.println();*/
+		    		}
+		    		else
+		    		{
+		    			for(int k = 0; k < yearlist.get(index).size(); k++)
+		    			{
+		    				if(yearlist.get(index).get(k) == tradeyear)
+		    				{
+		    					System.out.println(yearlist.get(index).get(k));
+		    					yearcheck = true;
+		    					break;
+		    				}
+		    			}
+		    			if(!yearcheck)
+		    			{
+		    				List<Integer> tradeyearlist3 = new ArrayList<Integer>();
+		    				for(int l = 0; l < yearlist.get(index).size(); l++)
+		    					tradeyearlist3.add(yearlist.get(index).get(l));
+	    					int tempcounter = counter.get(index);
+	    					tempcounter = tempcounter + 1;
+	    	    			counter.set(index, tempcounter);
+	    	    			tradeyearlist3.add(tradeyear);
+	    		    		yearlist.set(0, tradeyearlist3);
+		    			}
+		    		}
+	    		}
+		    			int tempmax = (Integer) maxprice.get(index);
+		    			int tempmin = (Integer) minprice.get(index);
+		    			if(tradeprice > tempmax)
+		    			{
+		    				tempprice = tempmax;
+		    				maxprice.set(index, tradeprice);	    				
+		    				minprice.set(index, tempprice);
+		    			}
+		    			else if(tradeprice > tempmin)
+		    				minprice.set(index, tradeprice);
+		    			else ;
+		    			appear = false;
+		    			yearcheck = false;
+		    		
+	    		
+	    		continue;
 	    	}
 	    }
-	    System.out.println(value/counter);
+	    for(int a = 0; a < yearlist.size(); a++)
+	    {
+	    	System.out.print(yearlist.get(a)+" ");
+	    }
+	    System.out.println();
+	    for(int a = 0; a < counter.size(); a++)
+	    {
+	    	System.out.print(counter.get(a)+" ");
+	    }
+	    System.out.println();
+	    for(int a = 0; a < counter.size(); a++)
+	    {
+	    	if(counter.get(a) > maxcounter)
+	    	{
+	    		maxcounter = counter.get(a);
+	    	}
+	    }
+	    System.out.println(maxcounter);
+	    for(int b = 0; b < counter.size(); b++)
+	    {
+	    	if(counter.get(b) == maxcounter)
+	    		indexlist.add(b);
+	    }
+	    for(int i = 0; i < indexlist.size(); i++)
+	    {
+	    	int tempnum = indexlist.get(i);
+	    	System.out.print(roadnamelist.get(tempnum)+", ");
+	    	System.out.print("最高成交價:"+maxprice.get(tempnum)+", ");
+	    	System.out.println("最低成交價:"+minprice.get(tempnum));
+	    }
 	}
 }
