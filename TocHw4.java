@@ -189,7 +189,6 @@ public class TocHW4
 		    			{
 		    				if(yearlist.get(index).get(k).equals(tradeyear))
 		    				{
-		    					System.out.println(yearlist.get(index).get(k));
 		    					yearcheck = true;
 		    					break;
 		    				}
@@ -273,7 +272,6 @@ public class TocHW4
 		    			{
 		    				if(yearlist.get(index).get(k).equals(tradeyear))
 		    				{
-		    					System.out.println(yearlist.get(index).get(k));
 		    					yearcheck = true;
 		    					break;
 		    				}
@@ -393,16 +391,6 @@ public class TocHW4
 	    		continue;
 	    	}
 	    }
-	    for(int a = 0; a < yearlist.size(); a++)
-	    {
-	    	System.out.print(yearlist.get(a)+" ");
-	    }
-	    System.out.println();
-	    for(int a = 0; a < counter.size(); a++)
-	    {
-	    	System.out.print(counter.get(a)+" ");
-	    }
-	    System.out.println();
 	    for(int a = 0; a < counter.size(); a++)
 	    {
 	    	if(counter.get(a) > maxcounter)
@@ -410,7 +398,6 @@ public class TocHW4
 	    		maxcounter = counter.get(a);
 	    	}
 	    }
-	    System.out.println(maxcounter);
 	    for(int b = 0; b < counter.size(); b++)
 	    {
 	    	if(counter.get(b) == maxcounter)
