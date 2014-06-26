@@ -83,8 +83,7 @@ public class TocHW4
 		    		for(int j = 0; j < roadnamelist.size(); j++)
 		    		{
 		    			if(roadnamelist.get(j).equals(avenuematcher.group()))
-		    			{
-		    				
+		    			{		    				
 		    				appear = true;
 		    				index = j;
 		    				break;
@@ -124,20 +123,20 @@ public class TocHW4
 		    			}
 		    		}
 	    		}
-		    			int tempmax = (Integer) maxprice.get(index);
-		    			int tempmin = (Integer) minprice.get(index);
-		    			if(tradeprice > tempmax)
-		    			{
-		    				tempprice = tempmax;
-		    				maxprice.set(index, tradeprice);	    				
-		    				minprice.set(index, tempprice);
-		    			}
-
-		    			else if(tradeprice > tempmin)
-		    				minprice.set(index, tradeprice);
-		    			else ;
-		    			appear = false;
-		    			yearcheck = false;
+		    	int tempmax = (Integer) maxprice.get(index);
+		    	int tempmin = (Integer) minprice.get(index);
+		    	if(tradeprice - tempmax > 0)
+		    	{
+		    		tempprice = tempmax;
+		    		maxprice.set(index, tradeprice);	    				
+		    		minprice.set(index, tempprice);
+		    	}
+		    	else if(tradeprice - tempmin > 0)
+		    		minprice.set(index, tradeprice);
+		    	else ;
+		    	appear = false;
+		    	yearcheck = false;
+		    	tempprice = 0;
 	    		continue;
 	    	}
 	    	if(roadmatcher.find())
@@ -157,18 +156,13 @@ public class TocHW4
 	    		{
 		    		for(int j = 0; j < roadnamelist.size(); j++)
 		    		{
-		    			//System.out.print(roadnamelist.get(j)+" ");
-	    				//System.out.println(avenuematcher.group());
 		    			if(roadnamelist.get(j).equals(roadmatcher.group()))
-		    			{
-		    				
+		    			{		    				
 		    				appear = true;
 		    				index = j;
-		    				//System.out.print("Index: "+index);
 		    				break;
 		    			}
 		    		}
-		    		//System.out.println();
 		    		if(!appear)
 		    		{
 		    			List<Integer> tradeyearlist2 = new ArrayList<Integer>();
@@ -179,9 +173,6 @@ public class TocHW4
 			    		maxprice.add(tradeprice);
 			    		minprice.add(0);
 			    		continue;
-			    		/*for(int a = 0; a < tradeyearlist2.size(); a++)
-			    			System.out.print(tradeyearlist2.get(a)+" ");
-			    		System.out.println();*/
 		    		}
 		    		else
 		    		{
@@ -205,22 +196,21 @@ public class TocHW4
 	    		    		yearlist.set(index, tradeyearlist3);
 		    			}
 		    		}
+	    		}
+		    	int tempmax = (Integer) maxprice.get(index);
+		    	int tempmin = (Integer) minprice.get(index);
+		    	if(tradeprice - tempmax > 0)
+		    	{
+		    		tempprice = tempmax;
+		    		maxprice.set(index, tradeprice);	    				
+		    		minprice.set(index, tempprice);
 		    	}
-		    			int tempmax = (Integer) maxprice.get(index);
-		    			int tempmin = (Integer) minprice.get(index);
-		    			if(tradeprice > tempmax)
-		    			{
-		    				tempprice = tempmax;
-		    				maxprice.set(index, tradeprice);	    				
-		    				minprice.set(index, tempprice);
-		    			}
-		    			else if(tradeprice > tempmin)
-		    				minprice.set(index, tradeprice);
-		    			else ;
-		    			appear = false;
-		    			yearcheck = false;
-		    		
-	    		
+		    	else if(tradeprice - tempmin > 0)
+		    		minprice.set(index, tradeprice);
+		    	else ;
+		    	appear = false;
+		    	yearcheck = false;
+		    	tempprice = 0;
 	    		continue;
 	    	}
 	    	if(streetmatcher.find())
@@ -240,18 +230,13 @@ public class TocHW4
 	    		{
 		    		for(int j = 0; j < roadnamelist.size(); j++)
 		    		{
-		    			//System.out.print(roadnamelist.get(j)+" ");
-	    				//System.out.println(avenuematcher.group());
 		    			if(roadnamelist.get(j).equals(streetmatcher.group()))
-		    			{
-		    				
+		    			{		    				
 		    				appear = true;
 		    				index = j;
-		    				//System.out.print("Index: "+index);
 		    				break;
 		    			}
 		    		}
-		    		//System.out.println();
 		    		if(!appear)
 		    		{
 		    			List<Integer> tradeyearlist2 = new ArrayList<Integer>();
@@ -262,9 +247,6 @@ public class TocHW4
 			    		maxprice.add(tradeprice);
 			    		minprice.add(0);
 			    		continue;
-			    		/*for(int a = 0; a < tradeyearlist2.size(); a++)
-			    			System.out.print(tradeyearlist2.get(a)+" ");
-			    		System.out.println();*/
 		    		}
 		    		else
 		    		{
@@ -289,21 +271,20 @@ public class TocHW4
 		    			}
 		    		}
 	    		}
-		    			int tempmax = (Integer) maxprice.get(index);
-		    			int tempmin = (Integer) minprice.get(index);
-		    			if(tradeprice > tempmax)
-		    			{
-		    				tempprice = tempmax;
-		    				maxprice.set(index, tradeprice);	    				
-		    				minprice.set(index, tempprice);
-		    			}
-		    			else if(tradeprice > tempmin)
-		    				minprice.set(index, tradeprice);
-		    			else ;
-		    			appear = false;
-		    			yearcheck = false;
-		    		
-	    		
+		    	int tempmax = (Integer) maxprice.get(index);
+		    	int tempmin = (Integer) minprice.get(index);
+		    	if(tradeprice - tempmax > 0)
+		    	{
+		    		tempprice = tempmax;
+		    		maxprice.set(index, tradeprice);	    				
+		    		minprice.set(index, tempprice);
+		    	}
+		    	else if(tradeprice - tempmin > 0)
+		    		minprice.set(index, tradeprice);
+		    	else ;
+		    	appear = false;
+		    	yearcheck = false;
+		    	tempprice = 0;
 	    		continue;
 	    	}
 	    	if(lanematcher.find())
@@ -323,18 +304,13 @@ public class TocHW4
 	    		{
 		    		for(int j = 0; j < roadnamelist.size(); j++)
 		    		{
-		    			//System.out.print(roadnamelist.get(j)+" ");
-	    				//System.out.println(avenuematcher.group());
 		    			if(roadnamelist.get(j).equals(lanematcher.group()))
-		    			{
-		    				
+		    			{		    				
 		    				appear = true;
 		    				index = j;
-		    				//System.out.print("Index: "+index);
 		    				break;
 		    			}
 		    		}
-		    		//System.out.println();
 		    		if(!appear)
 		    		{
 		    			List<Integer> tradeyearlist2 = new ArrayList<Integer>();
@@ -345,9 +321,6 @@ public class TocHW4
 			    		maxprice.add(tradeprice);
 			    		minprice.add(0);
 			    		continue;
-			    		/*for(int a = 0; a < tradeyearlist2.size(); a++)
-			    			System.out.print(tradeyearlist2.get(a)+" ");
-			    		System.out.println();*/
 		    		}
 		    		else
 		    		{
@@ -355,7 +328,6 @@ public class TocHW4
 		    			{
 		    				if(yearlist.get(index).get(k).equals(tradeyear))
 		    				{
-		    					System.out.println(yearlist.get(index).get(k));
 		    					yearcheck = true;
 		    					break;
 		    				}
@@ -373,21 +345,20 @@ public class TocHW4
 		    			}
 		    		}
 	    		}
-		    			int tempmax = (Integer) maxprice.get(index);
-		    			int tempmin = (Integer) minprice.get(index);
-		    			if(tradeprice > tempmax)
-		    			{
-		    				tempprice = tempmax;
-		    				maxprice.set(index, tradeprice);	    				
-		    				minprice.set(index, tempprice);
-		    			}
-		    			else if(tradeprice > tempmin)
-		    				minprice.set(index, tradeprice);
-		    			else ;
-		    			appear = false;
-		    			yearcheck = false;
-		    		
-	    		
+		    	int tempmax = (Integer) maxprice.get(index);
+		    	int tempmin = (Integer) minprice.get(index);
+		    	if(tradeprice - tempmax > 0)
+		    	{
+		    		tempprice = tempmax;
+		    		maxprice.set(index, tradeprice);	    				
+		    		minprice.set(index, tempprice);
+		    	}
+		    	else if(tradeprice - tempmin > 0)
+		    		minprice.set(index, tradeprice);
+		    	else ;
+		    	appear = false;
+		    	yearcheck = false;
+		    	tempprice = 0;
 	    		continue;
 	    	}
 	    }
